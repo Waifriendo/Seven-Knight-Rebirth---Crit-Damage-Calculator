@@ -4,211 +4,263 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7K Re:BIRTH - Stat Calc</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            background-color: #080a10;
+            background-image: 
+                radial-gradient(circle at center, #1a1e29 0%, #080a10 70%),
+                url('https://www.transparenttextures.com/patterns/dark-dotted.png');
             color: #e0e0e0;
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         .container {
-            background-color: #1e1e24;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            background-color: rgba(20, 26, 38, 0.95);
+            padding: 30px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 217, 255, 0.1);
             width: 100%;
-            max-width: 400px;
-            border: 1px solid #333;
+            max-width: 420px;
+            border: 1px solid #2a3449;
             position: relative;
         }
-        /* ปุ่มเปลี่ยนภาษา */
+        .container::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, #121620 0%, #fca311 50%, #121620 100%);
+            border-top-left-radius: 12px; border-top-right-radius: 12px;
+        }
+        
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2a3449;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin: 0;
+            color: #fca311;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 22px;
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(252, 163, 17, 0.5);
+        }
         .lang-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 5px 10px;
-            border-radius: 6px;
+            background-color: rgba(252, 163, 17, 0.1);
+            color: #fca311;
+            border: 1px solid #fca311;
+            padding: 4px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
             transition: 0.2s;
         }
-        .lang-btn:hover { background-color: #555; }
+        .lang-btn:hover { background-color: #fca311; color: #121620; }
         
-        h2 {
-            text-align: center;
-            color: #fca311;
-            margin-top: 10px;
-            font-size: 22px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 15px;
-        }
         .stat-box {
-            background-color: #2b2b36;
-            padding: 15px;
-            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(30, 39, 56, 0.9) 0%, rgba(20, 26, 38, 0.9) 100%);
+            padding: 16px;
+            border-radius: 8px;
             margin-bottom: 20px;
+            border: 1px solid #3d4a66;
             border-left: 4px solid #4a4a5a;
         }
         .stat-box.new { border-left-color: #fca311; }
-        h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
+        h3 { margin: 0 0 16px 0; font-size: 16px; color: #fff; text-transform: uppercase; letter-spacing: 1px;}
+        
         .input-group {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
             align-items: center;
-        }
-        .input-group label { font-size: 14px; color: #aaa; }
-        .input-group input {
-            width: 120px;
-            padding: 8px;
-            background-color: #121212;
-            border: 1px solid #444;
-            color: #fff;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 12px;
             border-radius: 6px;
-            text-align: right;
-            font-size: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .input-group input:focus { outline: none; border-color: #fca311; }
+        .input-group:last-child { margin-bottom: 0; }
+        .input-group label { font-size: 15px; color: #c0c0c0; display: flex; align-items: center;}
+        .icon { width: 18px; height: 18px; margin-right: 8px; opacity: 0.9;}
+
+        .input-group input {
+            width: 100px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #4d5c7a;
+            color: #fff;
+            text-align: right;
+            font-size: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            transition: 0.2s;
+            padding-bottom: 2px;
+        }
+        .input-group input:focus { outline: none; border-bottom-color: #00d9ff; color: #00d9ff; }
+        .input-group input::placeholder { color: #555; font-weight: 400; }
+        
         button.calc-btn {
             width: 100%;
-            padding: 15px;
-            background-color: #fca311;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 14px;
+            background: linear-gradient(90deg, #0d121c 0%, #1a2233 50%, #0d121c 100%);
+            color: #fff;
+            border: 1px solid #00d9ff;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             cursor: pointer;
-            transition: 0.2s;
-            margin-top: 10px;
+            transition: 0.3s;
+            margin-top: 5px;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.1);
         }
-        button.calc-btn:hover { background-color: #e59400; transform: translateY(-2px); }
-        button.calc-btn:active { transform: translateY(0); }
+        button.calc-btn:hover { background: #1a2233; border-color: #fff; box-shadow: 0 0 20px rgba(0, 217, 255, 0.4); }
+        button.calc-btn:active { transform: scale(0.98); }
+
         #result {
             margin-top: 25px;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 18px;
+            border-radius: 8px;
             text-align: center;
-            font-size: 16px;
             display: none;
-            background-color: #121212;
-            border: 1px solid #333;
+            background-color: #0a0d14;
+            border: 1px solid #3d4a66;
+            position: relative;
         }
-        .better { color: #4ade80; font-weight: bold; font-size: 20px; display: block; margin-top: 10px;}
-        .worse { color: #f87171; font-weight: bold; font-size: 20px; display: block; margin-top: 10px;}
-        .highlight { color: #fca311; font-weight: bold; font-size: 18px; }
-        .diff { font-size: 14px; color: #888; margin-top: 5px; display: block; }
+        
+        .res-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .better { color: #00ff88; font-weight: 700; font-size: 20px; display: block; margin-top: 15px;}
+        .worse { color: #ff4444; font-weight: 700; font-size: 20px; display: block; margin-top: 15px;}
+        .highlight { color: #fff; font-weight: 700; font-size: 22px; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        .highlight.new-val { color: #00d9ff; text-shadow: 0 0 5px rgba(0,217,255,0.5); }
+        .diff { font-size: 14px; color: #aaa; margin-top: 5px; display: block; font-weight: 600;}
     </style>
 </head>
 <body>
 
 <div class="container">
-    <button class="lang-btn" onclick="toggleLang()" id="langToggle">ENG</button>
-
-    <h2 id="text-title">⚔️ คำนวณดาเมจคริติคอล</h2>
+    <div class="header-bar">
+        <h2 id="text-title">⚔️ STAT COMPARISON</h2>
+        <button class="lang-btn" onclick="toggleLang()" id="langToggle">ENG</button>
+    </div>
     
     <div class="stat-box">
-        <h3 id="text-old-box">สเตตัสเดิม (ของที่ใส่อยู่)</h3>
+        <h3 id="text-old-box">Current Stats</h3>
         <div class="input-group">
-            <label id="text-old-atk">พลังโจมตี (Atk):</label>
+            <label id="text-old-atk">
+                <img src="https://img.icons8.com/ios-filled/50/fca311/sword.png" class="icon" alt="atk">
+                Attack
+            </label>
             <input type="number" id="oldAtk" placeholder="0">
         </div>
         <div class="input-group">
-            <label id="text-old-crit">คริแดม % (Crit Dmg):</label>
+            <label id="text-old-crit">
+                <img src="https://img.icons8.com/ios-filled/50/00d9ff/diamond--v1.png" class="icon" alt="crit">
+                Crit Dmg (%)
+            </label>
             <input type="number" id="oldCritDmg" placeholder="0">
         </div>
     </div>
 
     <div class="stat-box new">
-        <h3 id="text-new-box">สเตตัสใหม่ (ของชิ้นใหม่)</h3>
+        <h3 id="text-new-box">New Equipment</h3>
         <div class="input-group">
-            <label id="text-new-atk">พลังโจมตี (Atk):</label>
+            <label id="text-new-atk">
+                <img src="https://img.icons8.com/ios-filled/50/fca311/sword.png" class="icon" alt="atk">
+                Attack
+            </label>
             <input type="number" id="newAtk" placeholder="0">
         </div>
         <div class="input-group">
-            <label id="text-new-crit">คริแดม % (Crit Dmg):</label>
+            <label id="text-new-crit">
+                <img src="https://img.icons8.com/ios-filled/50/00d9ff/diamond--v1.png" class="icon" alt="crit">
+                Crit Dmg (%)
+            </label>
             <input type="number" id="newCritDmg" placeholder="0">
         </div>
     </div>
 
-    <button class="calc-btn" onclick="calculateDamage()" id="text-btn">คำนวณเปรียบเทียบ</button>
+    <button class="calc-btn" onclick="calculateDamage()" id="text-btn">DEPLOY & COMPARE</button>
 
     <div id="result"></div>
 </div>
 
 <script>
-    // ชุดคำแปลภาษา
     const lang = {
         th: {
-            title: "⚔️ คำนวณดาเมจคริติคอล",
-            oldBox: "สเตตัสเดิม (ของที่ใส่อยู่)",
-            newBox: "สเตตัสใหม่ (ของชิ้นใหม่)",
-            atkLabel: "พลังโจมตี (Atk):",
-            critLabel: "คริแดม % (Crit Dmg):",
+            title: "⚔️ เปรียบเทียบสเตตัส",
+            oldBox: "สเตตัสปัจจุบัน",
+            newBox: "สเตตัสเมื่อเปลี่ยน",
+            atkLabel: `<img src="https://img.icons8.com/ios-filled/50/fca311/sword.png" class="icon" alt="atk"> พลังโจมตี`,
+            critLabel: `<img src="https://img.icons8.com/ios-filled/50/00d9ff/diamond--v1.png" class="icon" alt="crit"> ความแรงคริ (%)`,
             btn: "คำนวณเปรียบเทียบ",
-            resOld: "ดาเมจเดิม:",
-            resNew: "ดาเมจใหม่:",
-            better: "✅ เปลี่ยนเลย! ตีแรงขึ้น",
-            worse: "❌ อย่าเปลี่ยน! ตีเบาลง",
-            equal: "⚖️ ดาเมจเท่าเดิมเป๊ะ",
-            dmgUp: "(ดาเมจเพิ่มขึ้น ",
-            dmgDown: "(ดาเมจหายไป ",
+            resOld: "ดาเมจเดิม",
+            resNew: "ดาเมจใหม่",
+            better: "✅ เปลี่ยนเลย! พลังทำลายสูงขึ้น",
+            worse: "❌ อย่าเปลี่ยน! พลังทำลายลดลง",
+            equal: "⚖️ พลังทำลายเท่าเดิมเป๊ะ",
+            dmgUp: "(แรงขึ้น ",
+            dmgDown: "(เบาลง ",
             unit: " หน่วย)"
         },
         en: {
-            title: "⚔️ Crit Damage Calc",
-            oldBox: "Old Stats (Current)",
-            newBox: "New Stats (To Equip)",
-            atkLabel: "Attack (Atk):",
-            critLabel: "Crit Dmg (%):",
-            btn: "Compare Damage",
-            resOld: "Old Dmg:",
-            resNew: "New Dmg:",
-            better: "✅ Upgrade! Higher Dmg",
-            worse: "❌ Don't! Lower Dmg",
-            equal: "⚖️ Damage is exactly the same",
-            dmgUp: "(Damage increased by ",
-            dmgDown: "(Damage lost by ",
+            title: "⚔️ STAT COMPARISON",
+            oldBox: "Current Stats",
+            newBox: "New Equipment",
+            atkLabel: `<img src="https://img.icons8.com/ios-filled/50/fca311/sword.png" class="icon" alt="atk"> Attack`,
+            critLabel: `<img src="https://img.icons8.com/ios-filled/50/00d9ff/diamond--v1.png" class="icon" alt="crit"> Crit Dmg (%)`,
+            btn: "DEPLOY & COMPARE",
+            resOld: "Old Dmg",
+            resNew: "New Dmg",
+            better: "✅ UPGRADE! Combat Power Increased",
+            worse: "❌ DOWNGRADE! Combat Power Decreased",
+            equal: "⚖️ Damage remains exactly the same",
+            dmgUp: "(Increased by ",
+            dmgDown: "(Decreased by ",
             unit: " pts)"
         }
     };
 
-    let currentLang = 'th';
+    let currentLang = 'en';
 
-    // ฟังก์ชันสลับภาษา
     function toggleLang() {
         currentLang = currentLang === 'th' ? 'en' : 'th';
         
-        // อัปเดตข้อความบนปุ่ม
         document.getElementById('langToggle').innerText = currentLang === 'th' ? 'ENG' : 'TH';
-        
-        // อัปเดตข้อความในหน้าเว็บ
         document.getElementById('text-title').innerText = lang[currentLang].title;
         document.getElementById('text-old-box').innerText = lang[currentLang].oldBox;
         document.getElementById('text-new-box').innerText = lang[currentLang].newBox;
-        
-        document.getElementById('text-old-atk').innerText = lang[currentLang].atkLabel;
-        document.getElementById('text-old-crit').innerText = lang[currentLang].critLabel;
-        document.getElementById('text-new-atk').innerText = lang[currentLang].atkLabel;
-        document.getElementById('text-new-crit').innerText = lang[currentLang].critLabel;
-        
+        document.getElementById('text-old-atk').innerHTML = lang[currentLang].atkLabel;
+        document.getElementById('text-old-crit').innerHTML = lang[currentLang].critLabel;
+        document.getElementById('text-new-atk').innerHTML = lang[currentLang].atkLabel;
+        document.getElementById('text-new-crit').innerHTML = lang[currentLang].critLabel;
         document.getElementById('text-btn').innerText = lang[currentLang].btn;
 
-        // ถ้ามีการคำนวณค้างไว้ ให้กดคำนวณใหม่เพื่อเปลี่ยนภาษาผลลัพธ์ด้วย
         if (document.getElementById('result').style.display === 'block') {
             calculateDamage();
         }
     }
 
-    // ฟังก์ชันคำนวณ
     function calculateDamage() {
         let oldAtk = parseFloat(document.getElementById('oldAtk').value) || 0;
         let oldCritDmg = parseFloat(document.getElementById('oldCritDmg').value) || 0;
@@ -222,28 +274,27 @@
         let resultDiv = document.getElementById('result');
         resultDiv.style.display = 'block';
 
-        let t = lang[currentLang]; // เรียกใช้คำแปลภาษาปัจจุบัน
+        let t = lang[currentLang];
 
         let htmlContent = `
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span style="color: #aaa;">${t.resOld}</span>
-                <span class="highlight">${oldDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
+            <div class="res-panel">
+                <span style="color: #aaa;">${t.resOld}:</span>
+                <span class="highlight">${oldDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span>
             </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <span style="color: #aaa;">${t.resNew}</span>
-                <span class="highlight">${newDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
+            <div class="res-panel" style="background: rgba(0, 217, 255, 0.05); border: 1px solid rgba(0,217,255,0.2);">
+                <span style="color: #00d9ff;">${t.resNew}:</span>
+                <span class="highlight new-val">${newDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span>
             </div>
-            <hr style="border-color: #333; margin: 15px 0;">
         `;
 
         if (newDamage > oldDamage) {
             htmlContent += `<span class="better">${t.better}</span>
-                            <span class="diff">${t.dmgUp}${diff.toLocaleString(undefined, {maximumFractionDigits: 2})}${t.unit}</span>`;
+                            <span class="diff">${t.dmgUp}${diff.toLocaleString(undefined, {maximumFractionDigits: 0})} ${t.unit}</span>`;
         } else if (newDamage < oldDamage) {
             htmlContent += `<span class="worse">${t.worse}</span>
-                            <span class="diff">${t.dmgDown}${Math.abs(diff).toLocaleString(undefined, {maximumFractionDigits: 2})}${t.unit}</span>`;
+                            <span class="diff">${t.dmgDown}${Math.abs(diff).toLocaleString(undefined, {maximumFractionDigits: 0})} ${t.unit}</span>`;
         } else {
-            htmlContent += `<span style="color: #60a5fa; font-weight: bold; font-size: 18px; display: block; margin-top: 10px;">${t.equal}</span>`;
+            htmlContent += `<span style="color: #60a5fa; font-weight: bold; font-size: 18px; display: block; margin-top: 15px;">${t.equal}</span>`;
         }
 
         resultDiv.innerHTML = htmlContent;
