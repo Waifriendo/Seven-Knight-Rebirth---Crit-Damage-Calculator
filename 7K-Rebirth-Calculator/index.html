@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7K Re:BIRTH - Stat Calc</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background-color: #1e1e24;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #333;
+        }
+        h2 {
+            text-align: center;
+            color: #fca311;
+            margin-top: 0;
+            font-size: 22px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+        .stat-box {
+            background-color: #2b2b36;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4a4a5a;
+        }
+        .stat-box.new { border-left-color: #fca311; }
+        h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .input-group label { font-size: 14px; color: #aaa; }
+        .input-group input {
+            width: 120px;
+            padding: 8px;
+            background-color: #121212;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 6px;
+            text-align: right;
+            font-size: 16px;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #fca311;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #fca311;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #e59400; transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 16px;
+            display: none;
+            background-color: #121212;
+            border: 1px solid #333;
+        }
+        .better { color: #4ade80; font-weight: bold; font-size: 20px; display: block; margin-top: 10px;}
+        .worse { color: #f87171; font-weight: bold; font-size: 20px; display: block; margin-top: 10px;}
+        .highlight { color: #fca311; font-weight: bold; font-size: 18px; }
+        .diff { font-size: 14px; color: #888; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>⚔️ คำนวณดาเมจคริติคอล</h2>
+    
+    <div class="stat-box">
+        <h3>สเตตัสเดิม (ของที่ใส่อยู่)</h3>
+        <div class="input-group">
+            <label>พลังโจมตี (Atk):</label>
+            <input type="number" id="oldAtk" placeholder="เช่น 4858">
+        </div>
+        <div class="input-group">
+            <label>คริแดม % (Crit Dmg):</label>
+            <input type="number" id="oldCritDmg" placeholder="เช่น 324">
+        </div>
+    </div>
+
+    <div class="stat-box new">
+        <h3>สเตตัสใหม่ (ของชิ้นใหม่)</h3>
+        <div class="input-group">
+            <label>พลังโจมตี (Atk):</label>
+            <input type="number" id="newAtk" placeholder="เช่น 4983">
+        </div>
+        <div class="input-group">
+            <label>คริแดม % (Crit Dmg):</label>
+            <input type="number" id="newCritDmg" placeholder="เช่น 318">
+        </div>
+    </div>
+
+    <button onclick="calculateDamage()">คำนวณเปรียบเทียบ</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function calculateDamage() {
+        let oldAtk = parseFloat(document.getElementById('oldAtk').value) || 0;
+        let oldCritDmg = parseFloat(document.getElementById('oldCritDmg').value) || 0;
+        let newAtk = parseFloat(document.getElementById('newAtk').value) || 0;
+        let newCritDmg = parseFloat(document.getElementById('newCritDmg').value) || 0;
+
+        let oldDamage = oldAtk * (oldCritDmg / 100);
+        let newDamage = newAtk * (newCritDmg / 100);
+        let diff = newDamage - oldDamage;
+
+        let resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+
+        let htmlContent = `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="color: #aaa;">ดาเมจเดิม:</span>
+                <span class="highlight">${oldDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <span style="color: #aaa;">ดาเมจใหม่:</span>
+                <span class="highlight">${newDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
+            </div>
+            <hr style="border-color: #333; margin: 15px 0;">
+        `;
+
+        if (newDamage > oldDamage) {
+            htmlContent += `<span class="better">✅ เปลี่ยนเลย! ตีแรงขึ้น</span>
+                            <span class="diff">(ดาเมจเพิ่มขึ้น ${diff.toLocaleString(undefined, {maximumFractionDigits: 2})} หน่วย)</span>`;
+        } else if (newDamage < oldDamage) {
+            htmlContent += `<span class="worse">❌ อย่าเปลี่ยน! ตีเบาลง</span>
+                            <span class="diff">(ดาเมจหายไป ${Math.abs(diff).toLocaleString(undefined, {maximumFractionDigits: 2})} หน่วย)</span>`;
+        } else {
+            htmlContent += `<span style="color: #60a5fa; font-weight: bold; font-size: 18px; display: block; margin-top: 10px;">⚖️ ดาเมจเท่าเดิมเป๊ะ</span>`;
+        }
+
+        resultDiv.innerHTML = htmlContent;
+    }
+</script>
+
+</body>
+</html>
