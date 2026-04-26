@@ -23,11 +23,29 @@
             width: 100%;
             max-width: 400px;
             border: 1px solid #333;
+            position: relative;
         }
+        /* ปุ่มเปลี่ยนภาษา */
+        .lang-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .lang-btn:hover { background-color: #555; }
+        
         h2 {
             text-align: center;
             color: #fca311;
-            margin-top: 0;
+            margin-top: 10px;
             font-size: 22px;
             border-bottom: 2px solid #333;
             padding-bottom: 15px;
@@ -58,11 +76,8 @@
             text-align: right;
             font-size: 16px;
         }
-        .input-group input:focus {
-            outline: none;
-            border-color: #fca311;
-        }
-        button {
+        .input-group input:focus { outline: none; border-color: #fca311; }
+        button.calc-btn {
             width: 100%;
             padding: 15px;
             background-color: #fca311;
@@ -75,8 +90,8 @@
             transition: 0.2s;
             margin-top: 10px;
         }
-        button:hover { background-color: #e59400; transform: translateY(-2px); }
-        button:active { transform: translateY(0); }
+        button.calc-btn:hover { background-color: #e59400; transform: translateY(-2px); }
+        button.calc-btn:active { transform: translateY(0); }
         #result {
             margin-top: 25px;
             padding: 20px;
@@ -96,38 +111,104 @@
 <body>
 
 <div class="container">
-    <h2>⚔️ คำนวณดาเมจคริติคอล</h2>
+    <button class="lang-btn" onclick="toggleLang()" id="langToggle">ENG</button>
+
+    <h2 id="text-title">⚔️ คำนวณดาเมจคริติคอล</h2>
     
     <div class="stat-box">
-        <h3>สเตตัสเดิม (ของที่ใส่อยู่)</h3>
+        <h3 id="text-old-box">สเตตัสเดิม (ของที่ใส่อยู่)</h3>
         <div class="input-group">
-            <label>พลังโจมตี (Atk):</label>
-            <input type="number" id="oldAtk" placeholder="เช่น 4858">
+            <label id="text-old-atk">พลังโจมตี (Atk):</label>
+            <input type="number" id="oldAtk" placeholder="4858">
         </div>
         <div class="input-group">
-            <label>คริแดม % (Crit Dmg):</label>
-            <input type="number" id="oldCritDmg" placeholder="เช่น 324">
+            <label id="text-old-crit">คริแดม % (Crit Dmg):</label>
+            <input type="number" id="oldCritDmg" placeholder="324">
         </div>
     </div>
 
     <div class="stat-box new">
-        <h3>สเตตัสใหม่ (ของชิ้นใหม่)</h3>
+        <h3 id="text-new-box">สเตตัสใหม่ (ของชิ้นใหม่)</h3>
         <div class="input-group">
-            <label>พลังโจมตี (Atk):</label>
-            <input type="number" id="newAtk" placeholder="เช่น 4983">
+            <label id="text-new-atk">พลังโจมตี (Atk):</label>
+            <input type="number" id="newAtk" placeholder="4983">
         </div>
         <div class="input-group">
-            <label>คริแดม % (Crit Dmg):</label>
-            <input type="number" id="newCritDmg" placeholder="เช่น 318">
+            <label id="text-new-crit">คริแดม % (Crit Dmg):</label>
+            <input type="number" id="newCritDmg" placeholder="318">
         </div>
     </div>
 
-    <button onclick="calculateDamage()">คำนวณเปรียบเทียบ</button>
+    <button class="calc-btn" onclick="calculateDamage()" id="text-btn">คำนวณเปรียบเทียบ</button>
 
     <div id="result"></div>
 </div>
 
 <script>
+    // ชุดคำแปลภาษา
+    const lang = {
+        th: {
+            title: "⚔️ คำนวณดาเมจคริติคอล",
+            oldBox: "สเตตัสเดิม (ของที่ใส่อยู่)",
+            newBox: "สเตตัสใหม่ (ของชิ้นใหม่)",
+            atkLabel: "พลังโจมตี (Atk):",
+            critLabel: "คริแดม % (Crit Dmg):",
+            btn: "คำนวณเปรียบเทียบ",
+            resOld: "ดาเมจเดิม:",
+            resNew: "ดาเมจใหม่:",
+            better: "✅ เปลี่ยนเลย! ตีแรงขึ้น",
+            worse: "❌ อย่าเปลี่ยน! ตีเบาลง",
+            equal: "⚖️ ดาเมจเท่าเดิมเป๊ะ",
+            dmgUp: "(ดาเมจเพิ่มขึ้น ",
+            dmgDown: "(ดาเมจหายไป ",
+            unit: " หน่วย)"
+        },
+        en: {
+            title: "⚔️ Crit Damage Calc",
+            oldBox: "Old Stats (Current)",
+            newBox: "New Stats (To Equip)",
+            atkLabel: "Attack (Atk):",
+            critLabel: "Crit Dmg (%):",
+            btn: "Compare Damage",
+            resOld: "Old Dmg:",
+            resNew: "New Dmg:",
+            better: "✅ Upgrade! Higher Dmg",
+            worse: "❌ Don't! Lower Dmg",
+            equal: "⚖️ Damage is exactly the same",
+            dmgUp: "(Damage increased by ",
+            dmgDown: "(Damage lost by ",
+            unit: " pts)"
+        }
+    };
+
+    let currentLang = 'th';
+
+    // ฟังก์ชันสลับภาษา
+    function toggleLang() {
+        currentLang = currentLang === 'th' ? 'en' : 'th';
+        
+        // อัปเดตข้อความบนปุ่ม
+        document.getElementById('langToggle').innerText = currentLang === 'th' ? 'ENG' : 'TH';
+        
+        // อัปเดตข้อความในหน้าเว็บ
+        document.getElementById('text-title').innerText = lang[currentLang].title;
+        document.getElementById('text-old-box').innerText = lang[currentLang].oldBox;
+        document.getElementById('text-new-box').innerText = lang[currentLang].newBox;
+        
+        document.getElementById('text-old-atk').innerText = lang[currentLang].atkLabel;
+        document.getElementById('text-old-crit').innerText = lang[currentLang].critLabel;
+        document.getElementById('text-new-atk').innerText = lang[currentLang].atkLabel;
+        document.getElementById('text-new-crit').innerText = lang[currentLang].critLabel;
+        
+        document.getElementById('text-btn').innerText = lang[currentLang].btn;
+
+        // ถ้ามีการคำนวณค้างไว้ ให้กดคำนวณใหม่เพื่อเปลี่ยนภาษาผลลัพธ์ด้วย
+        if (document.getElementById('result').style.display === 'block') {
+            calculateDamage();
+        }
+    }
+
+    // ฟังก์ชันคำนวณ
     function calculateDamage() {
         let oldAtk = parseFloat(document.getElementById('oldAtk').value) || 0;
         let oldCritDmg = parseFloat(document.getElementById('oldCritDmg').value) || 0;
@@ -141,26 +222,28 @@
         let resultDiv = document.getElementById('result');
         resultDiv.style.display = 'block';
 
+        let t = lang[currentLang]; // เรียกใช้คำแปลภาษาปัจจุบัน
+
         let htmlContent = `
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span style="color: #aaa;">ดาเมจเดิม:</span>
+                <span style="color: #aaa;">${t.resOld}</span>
                 <span class="highlight">${oldDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
             </div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <span style="color: #aaa;">ดาเมจใหม่:</span>
+                <span style="color: #aaa;">${t.resNew}</span>
                 <span class="highlight">${newDamage.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
             </div>
             <hr style="border-color: #333; margin: 15px 0;">
         `;
 
         if (newDamage > oldDamage) {
-            htmlContent += `<span class="better">✅ เปลี่ยนเลย! ตีแรงขึ้น</span>
-                            <span class="diff">(ดาเมจเพิ่มขึ้น ${diff.toLocaleString(undefined, {maximumFractionDigits: 2})} หน่วย)</span>`;
+            htmlContent += `<span class="better">${t.better}</span>
+                            <span class="diff">${t.dmgUp}${diff.toLocaleString(undefined, {maximumFractionDigits: 2})}${t.unit}</span>`;
         } else if (newDamage < oldDamage) {
-            htmlContent += `<span class="worse">❌ อย่าเปลี่ยน! ตีเบาลง</span>
-                            <span class="diff">(ดาเมจหายไป ${Math.abs(diff).toLocaleString(undefined, {maximumFractionDigits: 2})} หน่วย)</span>`;
+            htmlContent += `<span class="worse">${t.worse}</span>
+                            <span class="diff">${t.dmgDown}${Math.abs(diff).toLocaleString(undefined, {maximumFractionDigits: 2})}${t.unit}</span>`;
         } else {
-            htmlContent += `<span style="color: #60a5fa; font-weight: bold; font-size: 18px; display: block; margin-top: 10px;">⚖️ ดาเมจเท่าเดิมเป๊ะ</span>`;
+            htmlContent += `<span style="color: #60a5fa; font-weight: bold; font-size: 18px; display: block; margin-top: 10px;">${t.equal}</span>`;
         }
 
         resultDiv.innerHTML = htmlContent;
